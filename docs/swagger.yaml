@@ -1,0 +1,171 @@
+basePath: /
+definitions:
+  dto.RegNumsRequest:
+    properties:
+      regNums:
+        items:
+          type: string
+        type: array
+    type: object
+  dto.UpdateCarDto:
+    properties:
+      mark:
+        type: string
+      model:
+        type: string
+      regNum:
+        type: string
+      year:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for Cars Catalog Application
+  title: Cars Catalog API
+  version: "1.0"
+paths:
+  /api/addCars:
+    post:
+      consumes:
+      - application/json
+      description: Add cars to the database from external API based on registration
+        numbers
+      parameters:
+      - description: Registration numbers array
+        in: body
+        name: regNums
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegNumsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Request processed successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add cars
+      tags:
+      - cars
+  /api/delete/{id}:
+    delete:
+      description: Delete a car by its ID
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete a car
+      tags:
+      - cars
+  /api/getCars:
+    get:
+      description: Get cars list by filters with pagination
+      parameters:
+      - description: Car mark
+        in: query
+        name: mark
+        type: string
+      - description: Car model
+        in: query
+        name: model
+        type: string
+      - description: Car year
+        in: query
+        name: year
+        type: string
+      - default: "10"
+        description: Results limit
+        in: query
+        name: limit
+        type: string
+      - description: Next cursor for pagination
+        in: query
+        name: next
+        type: string
+      - description: Previous cursor for pagination
+        in: query
+        name: prev
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "405":
+          description: Method Not Allowed
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get cars list
+      tags:
+      - cars
+  /api/updateCar/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update a car by its ID
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Car update information
+        in: body
+        name: updateDto
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCarDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update a car
+      tags:
+      - cars
+swagger: "2.0"
